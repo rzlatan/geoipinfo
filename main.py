@@ -28,6 +28,15 @@ print ("Opened database connection successfully")
 #   while all the following runs will skip this part of the code
 #   as table already exists
 #
+# TABLE STRUCTURE NOTES:
+#   - ID as primary key was technically not needed as we could make combination
+#   of other columns but it is good for indexing if table gets too big and is
+#   easy to use
+#   - One of the requirements was that each row insert contains TIMESTAMP. This could
+#     be handled on the application level where during insert we would pass timestamp
+#     value as well, but it was easier to handle it on the DB level where by default
+#     we insert current timestamp.
+#
 conn.execute('''CREATE TABLE IF NOT EXISTS IP_INFO
     (ID                                INTEGER         PRIMARY KEY     AUTOINCREMENT,
      TIMESTAMP                         DATETIME     DEFAULT CURRENT_TIMESTAMP,
@@ -45,7 +54,7 @@ conn.execute('''CREATE TABLE IF NOT EXISTS IP_INFO
      COUNTRY_NAME                      TEXT,
      IN_EU                             INTEGER,
      EU_VAT_RATE                       INTEGER,
-     CONTINENT_CODE                     TEXT,
+     CONTINENT_CODE                    TEXT,
      CONTINENT_NAME                    TEXT,
      LATITUDE                          REAL,
      LONGITUDE                         REAL,
