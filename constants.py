@@ -1,8 +1,8 @@
-# Constants
+"""Common script constants"""
 
 # SQLite database
-# 
-DATABASE_NAME = 'geoip.db'
+#
+DATABASE_NAME = 'DB\\geoip.db'
 
 # URL for obtaining ip information
 #

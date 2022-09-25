@@ -1,3 +1,5 @@
+"""Script which gets all data from SQLite database and prints it on standard output"""
+
 import sqlite3
 import constants
 
@@ -10,3 +12,5 @@ rows = cursor.fetchall()
 
 for row in rows:
     print(row)
+
+conn.close()
