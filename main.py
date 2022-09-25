@@ -80,31 +80,6 @@ while True:
 
         data = response.json()
 
-        request = data[constants.REQUEST]
-        status = data[constants.STATUS]
-        delay = data[constants.DELAY]
-        credit = data[constants.CREDIT]
-        city = data[constants.CITY]
-        region = data[constants.REGION]
-        regionCode = data[constants.REGION_CODE]
-        regionName = data[constants.REGION_NAME]
-        areaCode = data[constants.AREA_CODE]
-        dmaCode = data[constants.DMA_CODE]
-        countryCode = data[constants.COUNTRY_CODE]
-        countryName = data[constants.COUNTRY_NAME]
-        inEu = data[constants.IN_EU]
-        euVatRate = data[constants.EU_VAT_RATE]
-        continentCode = data[constants.CONTINENT_CODE]
-        continentName = data[constants.CONTINENT_NAME]
-        latitude = data[constants.LATITUDE]
-        longitude = data[constants.LONGITUDE]
-        locationAccuracyRadius = data[constants.LOCATION_ACCURACY_RADIUS]
-        timezone = data[constants.TIMEZONE]
-        currencyCode = data[constants.CURRENCY_CODE]
-        currencySymbol = data[constants.CURRENCY_SYMBOL]
-        currencySymbolUTF8 = data[constants.CURRENCY_SYMBOL_UTF8]
-        currencyConverter = data[constants.CURRENCY_CONVERTER]
-
         query = f"""INSERT INTO IP_INFO (
                       REQUEST,
                       STATUS,
@@ -131,30 +106,30 @@ while True:
                       CURRENCY_SYMBOL_UTF8,
                       CURRENCY_CONVERTER)
                     VALUES (
-                      '{request}',
-                       {status},
-                      '{delay}',
-                      '{credit.replace("'","''")}',
-                      '{city}',
-                      '{region}',
-                      '{regionCode}',
-                      '{regionName}',
-                      '{areaCode}',
-                      '{dmaCode}',
-                      '{countryCode}',
-                      '{countryName}',
-                       {inEu},
-                       {bool(euVatRate)},
-                      '{continentCode}',
-                      '{continentName}',
-                       {latitude},
-                       {longitude},
-                       {locationAccuracyRadius},
-                      '{timezone}',
-                      '{currencyCode}',
-                      '{currencySymbol}',
-                      '{currencySymbolUTF8}',
-                       {currencyConverter})"""
+                      '{data[constants.REQUEST]}',
+                       {data[constants.STATUS]},
+                      '{data[constants.DELAY]}',
+                      '{data[constants.CREDIT].replace("'","''")}',
+                      '{data[constants.CITY]}',
+                      '{data[constants.REGION]}',
+                      '{data[constants.REGION_CODE]}',
+                      '{data[constants.REGION_NAME]}',
+                      '{data[constants.AREA_CODE]}',
+                      '{data[constants.DMA_CODE]}',
+                      '{data[constants.COUNTRY_CODE]}',
+                      '{data[constants.COUNTRY_NAME]}',
+                       {data[constants.IN_EU]},
+                       {bool(data[constants.EU_VAT_RATE])},
+                      '{data[constants.CONTINENT_CODE]}',
+                      '{data[constants.CONTINENT_NAME]}',
+                       {data[constants.LATITUDE]},
+                       {data[constants.LONGITUDE]},
+                       {data[constants.LOCATION_ACCURACY_RADIUS]},
+                      '{data[constants.TIMEZONE]}',
+                      '{data[constants.CURRENCY_CODE]}',
+                      '{data[constants.CURRENCY_SYMBOL]}',
+                      '{data[constants.CURRENCY_SYMBOL_UTF8]}',
+                       {data[constants.CURRENCY_CONVERTER]})"""
 
         print("Executing query: " + query)
         conn.execute(query)
@@ -165,5 +140,5 @@ while True:
 
     # Sleeping for one minute before next iteration
     #
-    print ("Sleeping for " + constants.SLEEP_INTERVAL_SECONDS + " seconds")
+    print ("Sleeping for " + str(constants.SLEEP_INTERVAL_SECONDS) + " seconds")
     time.sleep(constants.SLEEP_INTERVAL_SECONDS)
