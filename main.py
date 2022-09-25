@@ -1,32 +1,33 @@
+""" Script which once in a minute obtains ip related information
+    from geoplugin URI and stores them in SQLite database """
+
+import time
 import sqlite3
 import requests
 import constants
-import time
-import re
 
 # Open connection to a SQLite database stored in a given file.
 # Note:
-# 
+#
 #   1) During the first script run, file will be created if it doesn't exist.
 #   2) All the following runs will just open existing file
-# 
+#
 #   This makes script idempotent and allows multiple runs of the same script
 #   without failures
 #
 conn = sqlite3.connect(constants.DATABASE_NAME)
-print ("Opened database connection successfully");
-
+print ("Opened database connection successfully")
 
 # Create a table in the database if it already doesn't exist
-# 
-# NOTE: 
+#
+# NOTE:
 #   IF NOT EXISTS is important here as it allows us to run the script
 #   multiple times without failures saying that table already exists.
-# 
+#
 #   Instead, table will be created during the fist run,
 #   while all the following runs will skip this part of the code
 #   as table already exists
-# 
+#
 conn.execute('''CREATE TABLE IF NOT EXISTS IP_INFO
     (ID                                INTEGER         PRIMARY KEY     AUTOINCREMENT,
      TIMESTAMP                         DATETIME     DEFAULT CURRENT_TIMESTAMP,
@@ -54,29 +55,29 @@ conn.execute('''CREATE TABLE IF NOT EXISTS IP_INFO
      CURRENCY_SYMBOL                   TEXT,
      CURRENCY_SYMBOL_UTF8              TEXT,
      CURRENCY_CONVERTER                REAL);''')
-print ("Table created/opened successfully");
+print ("Table created/opened successfully")
 
 
 # Close database connection to clear the resources
 #
 conn.close()
-print("Database connection closed");
+print("Database connection closed")
 
-while (True):
-    print ("Invoking request to obtain current ip info");
-    response = requests.get(constants.GEOPLUGIN_ENDPOINT);
-    
-    if (response.ok):
-        print ("HTTP request to obtain ip succeeded, inserting data into the table");
+while True:
+    print ("Invoking request to obtain current ip info")
+    response = requests.get(constants.GEOPLUGIN_ENDPOINT, timeout=constants.REQUEST_TIMEOUT_SECONDS)
+
+    if response.ok:
+        print ("HTTP request to obtain ip succeeded, inserting data into the table")
 
         # Note, we don't need to open connection here again as we can reuse connection
         # which we opened at the start of the script. However, long open connections
-        # are not a good DB practice, especially in a case where after every short 
+        # are not a good DB practice, especially in a case where after every short
         # transaction we sleep for one minute. In a situation where multiple threads
         # are accessing the database, this would lead to the connection limit hit.
         #
         conn = sqlite3.connect(constants.DATABASE_NAME)
-       
+
         data = response.json()
 
         request = data[constants.REQUEST]
@@ -154,7 +155,7 @@ while (True):
                       '{currencySymbol}',
                       '{currencySymbolUTF8}',
                        {currencyConverter})"""
-        
+
         print("Executing query: " + query)
         conn.execute(query)
         conn.commit()
@@ -164,5 +165,5 @@ while (True):
 
     # Sleeping for one minute before next iteration
     #
-    print ("Sleeping for 60 seconds")
-    time.sleep(60);
+    print ("Sleeping for " + constants.SLEEP_INTERVAL_SECONDS + " seconds")
+    time.sleep(constants.SLEEP_INTERVAL_SECONDS)

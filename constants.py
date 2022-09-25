@@ -35,3 +35,8 @@ CURRENCY_CODE = "geoplugin_currencyCode"
 CURRENCY_SYMBOL = "geoplugin_currencySymbol"
 CURRENCY_SYMBOL_UTF8 = "geoplugin_currencySymbol_UTF8"
 CURRENCY_CONVERTER = "geoplugin_currencyConverter"
+
+# Interval constants
+#
+SLEEP_INTERVAL_SECONDS = 60
+REQUEST_TIMEOUT_SECONDS = 10
